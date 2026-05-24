@@ -21,13 +21,19 @@ services:
     ports:
       - "80:80"
       - "443:443"
-    # Передача TLS-ключей через Docker Secrets
-    secrets:
-      - nginx_cert
-      - nginx_key
+    # volumes с явными правами для локальной разработки
+    volumes:
+      - type: bind
+        source: ../certs/server.crt
+        target: /run/secrets/nginx_cert
+        read_only: true
+      - type: bind
+        source: ../certs/server.key
+        target: /run/secrets/nginx_key
+        read_only: true
     networks:
       - frontend-net
-    # 🩺 Проверка жизнеспособности каждые 30с
+    # Проверка жизнеспособности каждые 30с
     healthcheck:
       test: ["CMD", "curl", "-f", "-s", "https://localhost/"]
       interval: 30s
@@ -37,11 +43,11 @@ services:
     restart: unless-stopped
 
 # Секреты подтягиваются с хоста, но не попадают в слои образа
-secrets:
-  nginx_cert:
-    file: ../certs/server.crt
-  nginx_key:
-    file: ../certs/server.key
+#secrets:
+ # nginx_cert:
+  #  file: ../certs/server.crt
+  #nginx_key:
+   # file: ../certs/server.key
 
 # Изолированная сеть (без default bridge)
 networks:
