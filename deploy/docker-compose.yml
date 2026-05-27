@@ -1,0 +1,54 @@
+# @file deploy/docker-compose.yml
+# @brief Orchestrates Nginx service with secrets, read-only FS, tmpfs, and custom network
+# @author Кочиев Георгий Джамболатович (kochiev@sfedu.ru)
+# @date 2026-05-25
+# @version 1.0.0
+# @license MIT
+
+services:
+  nginx:
+    build:
+      context: ..
+      dockerfile: deploy/docker/nginx/Dockerfile
+    container_name: secure-nginx
+    # Файловая система только для чтения
+    read_only: true
+    # Временные данные в RAM (требование read-only)
+    tmpfs:
+      - /var/cache/nginx:size=64m,uid=101,gid=101
+      - /var/run:size=16m,uid=101,gid=101
+      - /tmp:size=16m
+    ports:
+      - "80:80"
+      - "443:443"
+    # volumes с явными правами для локальной разработки
+    volumes:
+      - type: bind
+        source: ../certs/server.crt
+        target: /run/secrets/nginx_cert
+        read_only: true
+      - type: bind
+        source: ../certs/server.key
+        target: /run/secrets/nginx_key
+        read_only: true
+    networks:
+      - frontend-net
+    # Проверка жизнеспособности каждые 10с
+    healthcheck:
+      # Используем оболочку и явно игнорируем проверку сертификата (-k/--insecure)
+      test: ["CMD-SHELL", "curl -k -f -s -o /dev/null https://localhost/ || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+# Секреты подтягиваются с хоста, но не попадают в слои образа
+#secrets:
+ # nginx_cert:
+  #  file: ../certs/server.crt
+  #nginx_key:
+   # file: ../certs/server.key
+
+# Изолированная сеть (без default bridge)
+networks:
+  frontend-net:
+    driver: bridge
