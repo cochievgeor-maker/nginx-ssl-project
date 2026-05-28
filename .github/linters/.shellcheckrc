@@ -1,0 +1,7 @@
+# @file .shellcheckrc
+# @brief Конфигурация линтера ShellCheck для Bash-скриптов
+# @author Тарасов С.Н.
+# @version 1.0.0
+shell=bash
+enable=all
+disable=SC1090,SC1091,SC2155
