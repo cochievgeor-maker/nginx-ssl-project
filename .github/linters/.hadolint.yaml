@@ -1,0 +1,9 @@
+# @file .hadolint.yaml
+# @brief Конфигурация линтера Hadolint для Dockerfile
+# @author Тарасов С.Н.
+# @version 1.0.0
+ignored:
+  - DL3008 # Разрешаем обновление пакетов без фиксации версий (для Alpine это ок)
+trustedRegistries:
+  - docker.io
+  - ghcr.io

@@ -1,0 +1,45 @@
+# === СЕКРЕТЫ И КЛЮЧИ (КАТЕГОРИЧЕСКИ ЗАПРЕЩЕНО В GIT!) ===
+certs/
+*.key
+*.pem
+*.crt
+*.pub
+.env
+.env.local
+.env.production
+
+# === IDE И РЕДАКТОРЫ ===
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# === PYTHON И LINTERS ===
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+env/
+.pytest_cache/
+.flake8
+
+# === LATEX АРТЕФАКТЫ (для отчёта) ===
+*.aux
+*.log
+*.toc
+*.blg
+*.bbl
+*.out
+*.fdb_latexmk
+*.fls
+
+# === АРХИВЫ И ВРЕМЕННЫЕ ФАЙЛЫ ===
+*.zip
+*.tar.gz
+*.tgz
+logs/
+tmp/
