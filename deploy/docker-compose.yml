@@ -1,0 +1,45 @@
+# @file deploy/docker-compose.yml
+# @brief Orchestrates Nginx service with secrets, read-only FS, tmpfs, and custom network
+# @author Кочиев Георгий Джамболатович (kochiev@sfedu.ru)
+# @date 2026-05-25
+# @version 1.0.0
+# @license MIT
+
+services:
+  nginx:
+    build:
+      context: ..
+      dockerfile: deploy/docker/nginx/Dockerfile
+    container_name: secure-nginx
+    # 🔒 Read-only filesystem + tmpfs
+    read_only: true
+    tmpfs:
+      - /var/cache/nginx:size=64m,uid=101,gid=101
+      - /var/run:size=16m,uid=101,gid=101
+      - /tmp:size=16m
+    ports:
+      - "80:80"
+      - "443:443"
+    # ✅ Монтируем ключи через volumes (вместо secrets) с read_only
+    volumes:
+      - type: bind
+        source: ../certs/server.crt
+        target: /run/secrets/nginx_cert
+        read_only: true
+      - type: bind
+        source: ../certs/server.key
+        target: /run/secrets/nginx_key
+        read_only: true
+    networks:
+      - frontend-net
+    healthcheck:
+      test: ["CMD-SHELL", "curl -k -f -s -o /dev/null https://localhost/ || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    restart: unless-stopped
+
+networks:
+  frontend-net:
+    driver: bridge

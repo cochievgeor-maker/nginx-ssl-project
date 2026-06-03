@@ -1,0 +1,42 @@
+# @file .github/workflows/deploy-docs.yml
+# @brief Автоматический деплой документации в GitHub Pages
+# @author Тарасов С.Н.
+# @version 1.0.0
+name: Deploy Documentation to GitHub Pages
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'docs/**'
+      - 'README.md'
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Build Documentation
+        run: |
+          mkdir -p _site
+          cp README.md _site/
+          cp -r docs _site/
+
+      - name: Upload Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '_site'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
