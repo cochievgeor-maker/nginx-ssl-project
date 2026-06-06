@@ -1,0 +1,36 @@
+# @file .dockerignore
+# @brief Исключение мусора из контекста сборки Docker
+# @author Кочиев Георгий Джамболатович (kochiev@sfedu.ru)
+# @date 2026-05-25
+# @version 1.0.0
+
+# Git и CI/CD
+.git/
+.github/
+.gitignore
+
+# Академическая документация и отчеты
+thesis/
+docs/
+*.md
+LICENSE.txt
+
+# Секреты и локальные конфиги
+.env
+.env.*
+*.pem
+*.key
+certs/
+
+# Кэш линтеров и виртуальные окружения
+__pycache__/
+.venv/
+venv/
+env/
+.pytest_cache/
+.flake8
+
+# Архивы и временные файлы
+*.zip
+*.tar.gz
+*.log

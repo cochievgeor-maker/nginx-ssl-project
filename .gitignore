@@ -1,0 +1,51 @@
+# Секреты и ключи (НИКОГДА не коммитить!)
+.env
+.env.production
+.env.local
+*.pem
+*.key
+*.pub
+certs/
+
+# Временные файлы ОС
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Логи и системные файлы
+*.log
+logs/
+*.pid
+*.sock
+
+# IDE и редакторы
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Python-кэш
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.venv/
+venv/
+env/
+
+# LaTeX-артефакты
+*.aux
+*.fdb_latexmk
+*.fls
+*.toc
+*.blg
+*.bbl
+*.out
+*.log
+
+# Архивы
+*.zip
+*.tar.gz
+*.tgz
+*.rar
