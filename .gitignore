@@ -49,3 +49,7 @@ env/
 *.tar.gz
 *.tgz
 *.rar
+
+:Zone.Identifier
+Thumbs.db
+Desktop.ini
