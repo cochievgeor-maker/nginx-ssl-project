@@ -53,3 +53,5 @@ env/
 :Zone.Identifier
 Thumbs.db
 Desktop.ini
+*:Zone.Identifier
+*.save
