@@ -29,17 +29,26 @@
 ### Развёртывание
 
 ```bash
-# 1. Клонируй репозиторий
-git clone git@github.com:cochievgeor-maker/nginx-ssl-project.git
-cd nginx-ssl-project
+## 🚀 Быстрый старт
 
-# 2. Сгенерируй сертификаты (для локальной разработки)
-bash deploy/scripts/generate-certs.sh
+> ⚠️ **Важно:** TLS-ключи намеренно исключены из репозитория (`.gitignore`). 
+> Перед первым запуском необходимо сгенерировать их локально. Это стандарт DevOps (Secrets Management).
 
-# 3. Запусти инфраструктуру
+Выполните следующие команды в корне проекта:
+
+```bash
+# 1. Создайте папку и сгенерируйте самоподписанные сертификаты (ECDSA)
+mkdir -p certs
+openssl ecparam -genkey -name prime256v1 -noout -out certs/server.key
+openssl req -new -x509 -sha256 -key certs/server.key -out certs/server.crt -days 365 -subj "/CN=localhost/O=DevOps/C=RU"
+
+# 2. Настройте права (необходимо для корректного монтирования в Docker на WSL2/Linux)
+chmod 644 certs/server.key certs/server.crt
+
+# 3. Соберите и запустите контейнеры
 cd deploy
 docker compose up -d --build
 
-# 4. Проверь работоспособность
-curl -k -I https://localhost
+# 4. Дождитесь инициализации healthcheck и запустите интеграционные тесты
+sleep 15
 bash scripts/tests/run_all_tests.sh
