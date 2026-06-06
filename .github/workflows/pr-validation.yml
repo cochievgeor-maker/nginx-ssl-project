@@ -17,6 +17,15 @@ jobs:
       - name: Build and start services
         run: |
           cd deploy
+      - name: Generate test certificates
+        run: |
+          mkdir -p certs
+          openssl req -x509 -nodes -days 1 \
+            -newkey ec -pkeyopt ec_paramgen_curve:prime256v1 \
+            -keyout certs/server.key \
+            -out certs/server.crt \
+            -subj "/CN=localhost/O=CI/C=RU"
+          chmod 644 certs/server.key
           docker compose up -d --build
 
       - name: Wait for healthcheck
